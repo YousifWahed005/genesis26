@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genesis 26 - Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="home.css"/>
+</head>
+<body>
+
+  <main class="screen home-screen">
+    <div class="overlay"></div>
+
+    <div class="home">
+      <header class="home-header">
+        <div>
+          <h1>Hello, <span id="user-name">Adventurer</span></h1>
+          <p class="home-subtitle">Welcome back to the event</p>
+        </div>
+      </header>
+
+      <div class="search-bar">
+        <img src="icons/search.svg" alt="Search" class="search-icon" />
+        <input type="text" placeholder="Search events..." />
+      </div>
+
+      <section class="home-section">
+        <div class="section-head">
+          <h2>Current Session</h2>
+          <span class="pill">Live</span>
+        </div>
+
+        <div class="session-card">
+          <div class="tag-row">
+            <span class="tag">Happening Now</span>
+            <span class="tag muted">Meeting</span>
+          </div>
+          <h3>Executive Council Meeting</h3>
+          <p class="muted-text">
+            Monthly strategic planning and decision-making session
+          </p>
+          <div class="session-meta">
+            <div class="meta-item">
+              <img src="icons/calendar-black.svg" alt="Time" />
+              <span>14:00 - 16:00</span>
+            </div>
+            <div class="meta-item">
+              <img src="icons/council.svg" alt="Location" />
+              <span>Grand Hall A</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <div class="section-head">
+          <h2>Your Progress</h2>
+          <span class="muted-text">2/4 Completed</span>
+        </div>
+
+        <div class="progress-card">
+          <div class="progress-head">
+            <span>Event Tasks</span>
+            <img src="icons/GamesIcon.svg" alt="Trophy" class="trophy" />
+          </div>
+          <div class="progress-bar">
+            <span class="progress-fill" style="width: 50%;"></span>
+          </div>
+          <ul class="task-list">
+            <li class="task done">Complete Profile</li>
+            <li class="task done">Visit 3 Booths</li>
+            <li class="task">Join a Networking Table</li>
+            <li class="task">Submit Feedback</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <div class="section-head">
+          <h2>Leaderboard</h2>
+        </div>
+
+        <div class="leaderboard-card">
+          <div class="leader-row highlight">
+            <div class="leader-left">
+              <div class="avatar">A</div>
+              <div>
+                <div class="leader-name">Ahmed Hassan</div>
+                <div class="leader-rank">Rank #1</div>
+              </div>
+            </div>
+            <div class="leader-points">
+              <div class="points">1250</div>
+              <div class="label">Points</div>
+            </div>
+          </div>
+
+          <div class="leader-row">
+            <div class="leader-left">
+              <div class="avatar">S</div>
+              <div>
+                <div class="leader-name">Sara Ali</div>
+                <div class="leader-rank">Rank #2</div>
+              </div>
+            </div>
+            <div class="leader-points">
+              <div class="points">1100</div>
+              <div class="label">Points</div>
+            </div>
+          </div>
+
+          <div class="leader-row">
+            <div class="leader-left">
+              <div class="avatar">O</div>
+              <div>
+                <div class="leader-name">Omar Khaled</div>
+                <div class="leader-rank">Rank #3</div>
+              </div>
+            </div>
+            <div class="leader-points">
+              <div class="points">950</div>
+              <div class="label">Points</div>
+            </div>
+          </div>
+
+          <div class="leader-row">
+            <div class="leader-left">
+              <div class="avatar">N</div>
+              <div>
+                <div class="leader-name">Nour El-Din</div>
+                <div class="leader-rank">Rank #4</div>
+              </div>
+            </div>
+            <div class="leader-points">
+              <div class="points">800</div>
+              <div class="label">Points</div>
+            </div>
+          </div>
+
+          <div class="leader-row">
+            <div class="leader-left">
+              <div class="avatar">L</div>
+              <div>
+                <div class="leader-name">Layla Mahmoud</div>
+                <div class="leader-rank">Rank #5</div>
+              </div>
+            </div>
+            <div class="leader-points">
+              <div class="points">750</div>
+              <div class="label">Points</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="nav-item active" href="home.html">
+        <img src="icons/HomeIcon.svg" alt="Home" />
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="agenda.html">
+        <img src="icons/calendar-black.svg" alt="Agenda" />
+        <span>Agenda</span>
+      </a>
+      <a class="nav-item" href="council.html">
+        <img src="icons/council.svg" alt="Council" />
+        <span>Council</span>
+      </a>
+      <a class="nav-item" href="#">
+        <img src="icons/GamesIcon.svg" alt="Games" />
+        <span>Games</span>
+      </a>
+      <a class="nav-item" href="profile.html">
+        <img src="icons/ProfileIcon.svg" alt="Profile" />
+        <span>Profile</span>
+      </a>
+    </nav>
+  </main>
+
+  <script src="home.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genesis 26 - Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="profile.css"/>
+</head>
+<body>
+
+  <main class="screen profile-screen">
+    <div class="overlay"></div>
+
+    <div class="profile">
+      <header class="profile-header">
+        <div>
+          <h1>Profile</h1>
+          <p class="profile-subtitle">Your account details</p>
+        </div>
+      </header>
+
+      <section class="profile-card">
+        <div class="avatar">A</div>
+        <h2 id="profile-name">Adventurer</h2>
+        <p class="profile-role" id="profile-role">Council Member</p>
+
+        <div class="profile-details">
+          <label class="detail-row">
+            <span class="label">Name</span>
+            <input class="profile-input" id="detail-name" type="text" value="Adventurer" />
+          </label>
+          <label class="detail-row">
+            <span class="label">Age</span>
+            <input class="profile-input" id="detail-age" type="number" min="1" max="120" value="24" />
+          </label>
+          <div class="detail-row">
+            <span class="label">Role</span>
+            <span class="value" id="detail-role">Council Member</span>
+          </div>
+        </div>
+      </section>
+
+      <button class="btn" type="button" id="save-profile-btn">
+        Save Changes
+      </button>
+      <button class="btn btn-signout" type="button" id="signout-btn">
+        Sign Out
+      </button>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="home.html">
+        <img src="icons/HomeIcon.svg" alt="Home" />
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="agenda.html">
+        <img src="icons/calendar-black.svg" alt="Agenda" />
+        <span>Agenda</span>
+      </a>
+      <a class="nav-item" href="council.html">
+        <img src="icons/council.svg" alt="Council" />
+        <span>Council</span>
+      </a>
+      <a class="nav-item" href="#">
+        <img src="icons/GamesIcon.svg" alt="Games" />
+        <span>Games</span>
+      </a>
+      <a class="nav-item active" href="profile.html">
+        <img src="icons/ProfileIcon.svg" alt="Profile" />
+        <span>Profile</span>
+      </a>
+    </nav>
+  </main>
+
+  <script src="profile.js"></script>
+
+</body>
+</html>

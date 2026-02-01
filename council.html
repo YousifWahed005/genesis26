@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genesis 26 - Council</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="council.css"/>
+</head>
+<body>
+
+  <main class="screen council-screen">
+    <div class="overlay"></div>
+
+    <div class="council">
+      <header class="council-header">
+        <div>
+          <h1>Council</h1>
+          <p class="council-subtitle">Meet our team</p>
+        </div>
+        <span class="pill-count">9 Members</span>
+      </header>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="org">Organizers</button>
+        <button class="tab" data-tab="vps">AIESEC VPs</button>
+        <button class="tab" data-tab="admin">Admin</button>
+      </div>
+
+      <section class="council-grid" data-panel="org">
+        <article class="member-card">
+          <div class="avatar">SJ</div>
+          <h3>Sarah Johnson</h3>
+          <p>Council President</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">MC</div>
+          <h3>Michael Chen</h3>
+          <p>Vice President</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">SA</div>
+          <h3>Sara Ahmed</h3>
+          <p>Operations Lead</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">OK</div>
+          <h3>Omar Khaled</h3>
+          <p>Program Director</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">NE</div>
+          <h3>Nour El-Din</h3>
+          <p>Logistics</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">LM</div>
+          <h3>Layla Mahmoud</h3>
+          <p>Community</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">RY</div>
+          <h3>Rami Youssef</h3>
+          <p>Sponsorships</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">RF</div>
+          <h3>Reem Fahmy</h3>
+          <p>Experience</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">MS</div>
+          <h3>Mostafa Saleh</h3>
+          <p>Marketing</p>
+        </article>
+      </section>
+
+      <section class="council-grid hidden" data-panel="vps">
+        <article class="member-card">
+          <div class="avatar">HA</div>
+          <h3>Hana Abdel</h3>
+          <p>VP Marketing</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">AS</div>
+          <h3>Amir Salem</h3>
+          <p>VP Finance</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">ME</div>
+          <h3>Mina Essam</h3>
+          <p>VP Operations</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">RS</div>
+          <h3>Rania Sobhy</h3>
+          <p>VP Events</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">YT</div>
+          <h3>Youssef Tarek</h3>
+          <p>VP Partnerships</p>
+        </article>
+        <article class="member-card">
+          <div class="avatar">AE</div>
+          <h3>Aya Emad</h3>
+          <p>VP Community</p>
+        </article>
+      </section>
+
+      <section class="council-grid hidden" data-panel="admin" id="admin-users">
+        <article class="member-card">
+          <div class="avatar">...</div>
+          <h3>Loading users</h3>
+          <p>Please wait</p>
+        </article>
+      </section>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="home.html">
+        <img src="icons/HomeIcon.svg" alt="Home" />
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="agenda.html">
+        <img src="icons/calendar-black.svg" alt="Agenda" />
+        <span>Agenda</span>
+      </a>
+      <a class="nav-item active" href="council.html">
+        <img src="icons/council.svg" alt="Council" />
+        <span>Council</span>
+      </a>
+      <a class="nav-item" href="#">
+        <img src="icons/GamesIcon.svg" alt="Games" />
+        <span>Games</span>
+      </a>
+      <a class="nav-item" href="profile.html">
+        <img src="icons/ProfileIcon.svg" alt="Profile" />
+        <span>Profile</span>
+      </a>
+    </nav>
+  </main>
+
+  <script type="module" src="./council.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genesis 26 - Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="signup.css"/>
+</head>
+<body>
+
+  <main class="screen">
+    <div class="overlay"></div>
+
+    <section class="card">
+      <img src="icons\logo2.png" alt="Genesis 26" class="logo"/>
+
+      <form class="form" id="signup-form">
+        <label>Adventurer Name</label>
+        <div class="input-group">
+          <img src="icons/ProfileIcon.svg" alt="Name" class="icon" />
+          <input id="signup-name" type="text" placeholder="your name" required />
+        </div>
+
+        <label>Email Rune</label>
+        <div class="input-group">
+          <img src="icons/message.svg" alt="Email" class="icon" />
+          <input id="signup-email" type="email" placeholder="your@email.com" required />
+        </div>
+
+        <label>Secret Code</label>
+        <div class="input-group">
+          <img src="icons/lock.svg" alt="Password" class="icon" />
+          <input id="signup-password" type="password" placeholder="••••••••" required />
+        </div>
+
+        <label>Confirm Code</label>
+        <div class="input-group">
+          <img src="icons/lock.svg" alt="Confirm Password" class="icon" />
+          <input id="signup-confirm" type="password" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn">
+          Create Account &rarr;
+        </button>
+      </form>
+
+      <p class="footer-text">
+        Already have an account?
+        <a href="index.html">Sign In</a>
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="signup.js"></script>
+
+</body>
+</html>
