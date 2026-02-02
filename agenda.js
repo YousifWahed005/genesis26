@@ -1,7 +1,4 @@
-﻿import { auth, db } from "./firebase.js";
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+﻿import { auth, db, onAuthStateChanged, getCurrentUserData, getOrganizerData } from "./firebase.js";
 import {
   collection,
   getDocs,
@@ -10,12 +7,12 @@ import {
   addDoc,
   serverTimestamp,
   doc,
-  getDoc,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 var agendaList = document.getElementById("agenda-list");
 var organizerTools = document.getElementById("agenda-organizer-tools");
+var agendaLoading = document.getElementById("agenda-loading");
 var agendaModal = document.getElementById("agenda-modal");
 var agendaForm = document.getElementById("agenda-form");
 var agendaTopic = document.getElementById("agenda-topic");
@@ -35,6 +32,9 @@ function renderAgenda(items) {
   }
 
   agendaList.innerHTML = "";
+  if (agendaLoading) {
+    agendaLoading.style.display = "none";
+  }
 
   if (!items.length) {
     var emptyCard = document.createElement("article");
@@ -58,10 +58,11 @@ function renderAgenda(items) {
     return;
   }
 
-  items.forEach(function (item) {
+  items.forEach(function (item, index) {
     var card = document.createElement("article");
     card.className = "agenda-card";
     card.setAttribute("data-id", item.id || "");
+    card.style.animationDelay = (index * 60) + "ms";
 
     var dayLabel = item.day ? String(item.day) : "-";
 
@@ -154,31 +155,29 @@ function showOrganizerTools(user) {
   });
 }
 
-function getUserRole(uid) {
-  if (!uid) {
-    return Promise.resolve("user");
-  }
-  return getDoc(doc(db, "users", uid)).then(function (snap) {
-    if (!snap.exists()) {
-      return "user";
-    }
-    var data = snap.data() || {};
-    return data.role || "user";
-  });
-}
-
 onAuthStateChanged(auth, function (user) {
   if (!user) {
     window.location.href = "index.html";
     return;
   }
 
-  getUserRole(user.uid)
-    .then(function (role) {
-      if (role === "organizer" || role === "admin") {
+  if (agendaLoading) {
+    agendaLoading.style.display = "block";
+  }
+
+  getCurrentUserData()
+    .then(function (data) {
+      console.log("UID:", data.uid);
+      console.log("systemRole:", data.systemRole);
+      if (data.systemRole === "organizer" || data.systemRole === "admin") {
         showOrganizerTools(user);
       }
-      return fetchAgenda();
+      return getOrganizerData(data.uid).then(function (orgData) {
+        if (orgData) {
+          console.log("councilRole:", orgData.councilRole || "n/a");
+        }
+        return fetchAgenda();
+      });
     })
     .catch(function (error) {
       console.error(error);
@@ -287,3 +286,5 @@ function submitAgenda(user) {
       alert(error.message);
     });
 }
+
+

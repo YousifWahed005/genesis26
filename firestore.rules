@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdminEmail() {
+      return isSignedIn() && request.auth.token.email in ["pascal@super.com", "tito@super.com"];
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.systemRole == "admin";
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == uid && (
+        (isAdminEmail() && request.resource.data.systemRole == "admin") ||
+        (!isAdminEmail() && request.resource.data.systemRole == "member")
+      );
+      allow update, delete: if isAdmin() || (
+        isSignedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.systemRole == resource.data.systemRole
+      );
+    }
+
+    match /profiles/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isAdmin() || (
+        isSignedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.function == "unassigned"
+      );
+      allow update, delete: if isAdmin() || (
+        isSignedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.function == resource.data.function &&
+        request.resource.data.diff(resource.data).changedKeys()
+          .hasOnly(["age", "funFact", "photoURL", "updatedAt"])
+      );
+    }
+
+    match /agenda/{agendaId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin() || (
+        isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.systemRole in ["admin", "organizer"]
+      );
+    }
+  }
+}

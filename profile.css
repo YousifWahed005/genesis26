@@ -73,6 +73,12 @@ body {
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
 }
 
+.profile-hero {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+
 .avatar {
   width: 78px;
   height: 78px;
@@ -88,6 +94,12 @@ body {
   font-size: 24px;
 }
 
+.avatar.photo {
+  background-size: cover;
+  background-position: center;
+  color: transparent;
+}
+
 .profile-card h2 {
   margin: 0 0 4px;
   font-size: 18px;
@@ -100,31 +112,96 @@ body {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.profile-details {
-  display: grid;
-  gap: 10px;
-  text-align: left;
-}
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
+.profile-email {
+  display: inline-flex;
   align-items: center;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 13px;
-  gap: 12px;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(242, 195, 58, 0.2);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.detail-row .label {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.detail-row .value {
+.email-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 195, 58, 0.18);
   color: #f2c33a;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.email-icon img {
+  width: 12px;
+  height: 12px;
+  filter: brightness(0) saturate(100%) invert(87%) sepia(24%) saturate(736%) hue-rotate(3deg) brightness(98%) contrast(96%);
+}
+
+.profile-panels {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.profile-panel {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(62, 39, 35, 0.50) 0%, rgba(62, 39, 35, 0.30) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.20);
+}
+
+.panel-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 195, 58, 0.18);
+  color: #f2c33a;
+  font-size: 18px;
+}
+
+.panel-icon img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(87%) sepia(24%) saturate(736%) hue-rotate(3deg) brightness(98%) contrast(96%);
+}
+
+.organizer-note {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.panel-text {
+  display: grid;
+  gap: 4px;
+}
+
+.panel-label {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.panel-value {
+  margin: 0;
+  font-size: 14px;
+  color: #f2c33a;
+  font-weight: 600;
 }
 
 .profile-input {
@@ -132,9 +209,10 @@ body {
   border: none;
   outline: none;
   color: #f2c33a;
-  font-weight: 500;
-  text-align: right;
+  font-weight: 600;
+  font-size: 14px;
   width: 100%;
+  padding: 0;
 }
 
 .profile-input::-webkit-inner-spin-button,

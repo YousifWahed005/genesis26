@@ -22,23 +22,87 @@
         </div>
       </header>
 
-      <section class="profile-card">
+      <section class="profile-card profile-hero">
         <div class="avatar">A</div>
         <h2 id="profile-name">Adventurer</h2>
         <p class="profile-role" id="profile-role">Council Member</p>
+        <div class="profile-email">
+          <span class="email-icon">
+            <img src="icons/message.svg" alt="Email" />
+          </span>
+          <span id="profile-email">user@email.com</span>
+        </div>
+      </section>
 
-        <div class="profile-details">
-          <label class="detail-row">
-            <span class="label">Name</span>
+      <section class="profile-panels">
+        <div class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/Group.svg" alt="Role" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Role</p>
+            <p class="panel-value" id="detail-role">Council Member</p>
+          </div>
+        </div>
+
+        <label class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/ProfileIcon.svg" alt="Name" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Name</p>
             <input class="profile-input" id="detail-name" type="text" value="Adventurer" />
-          </label>
-          <label class="detail-row">
-            <span class="label">Age</span>
+          </div>
+        </label>
+
+        <label class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/calendar-black.svg" alt="Age" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Age</p>
             <input class="profile-input" id="detail-age" type="number" min="1" max="120" value="24" />
-          </label>
-          <div class="detail-row">
-            <span class="label">Role</span>
-            <span class="value" id="detail-role">Council Member</span>
+          </div>
+        </label>
+
+        <label class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/message.svg" alt="Fun Fact" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Fun Fact</p>
+            <input class="profile-input" id="detail-funfact" type="text" />
+          </div>
+        </label>
+
+        <label class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/Icon.svg" alt="Photo" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Photo</p>
+            <input class="profile-input" id="detail-photo" type="file" accept="image/*" />
+          </div>
+        </label>
+      </section>
+
+      <section class="profile-panels" id="organizer-section" hidden>
+        <div class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/council.svg" alt="Organizer" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Organizer Status</p>
+            <p class="panel-value" id="organizer-status">Active</p>
+          </div>
+        </div>
+        <div class="profile-panel">
+          <div class="panel-icon">
+            <img src="icons/Group.svg" alt="Organizer Role" />
+          </div>
+          <div class="panel-text">
+            <p class="panel-label">Organizer Role</p>
+            <p class="panel-value" id="organizer-role">OC - Logistics</p>
           </div>
         </div>
       </section>
@@ -75,7 +139,7 @@
     </nav>
   </main>
 
-  <script src="profile.js"></script>
+  <script type="module" src="./profile.js"></script>
 
 </body>
 </html>

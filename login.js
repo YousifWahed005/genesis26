@@ -1,4 +1,4 @@
-import { auth, signInWithEmailAndPassword } from "./firebase.js";
+import { auth, signInWithEmailAndPassword, getCurrentUserData } from "./firebase.js";
 
 var loginForm = document.getElementById("login-form");
 if (loginForm) {
@@ -8,16 +8,18 @@ if (loginForm) {
     var password = document.getElementById("login-password").value;
 
     signInWithEmailAndPassword(auth, email, password)
-      .then(function (result) {
-        var user = result.user;
-        var name = user.displayName || "Adventurer";
-
-        localStorage.setItem(
-          "genesisSession",
-          JSON.stringify({ email: email, name: name })
-        );
-
-        window.location.href = "home.html";
+      .then(function () {
+        return getCurrentUserData()
+          .then(function (data) {
+            console.log("UID:", data.uid);
+            console.log("systemRole:", data.systemRole);
+          })
+          .catch(function (error) {
+            console.error(error);
+          })
+          .then(function () {
+            window.location.href = "loading.html";
+          });
       })
       .catch(function (error) {
         console.error(error);

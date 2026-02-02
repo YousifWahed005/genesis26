@@ -93,6 +93,15 @@ body {
 
 .home-section {
   margin-bottom: 22px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: homeCardIn 0.45s ease forwards;
+}
+
+.loading-status {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
 }
 
 .section-head {
@@ -259,6 +268,13 @@ body {
   border: 1px solid rgba(245, 180, 0, 0.2);
   display: grid;
   gap: 10px;
+}
+
+@keyframes homeCardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .leader-row {
