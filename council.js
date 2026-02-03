@@ -14,10 +14,11 @@ console.log("council.js start");
 var adminTools = document.getElementById("admin-tools");
 var adminUsersPanel = document.getElementById("admin-users");
 
-var FUNCTION_OPTIONS = ["unassigned", "IGV", "OGV", "IGTE", "B2C", "OGTA", "TM"];
+var FUNCTION_OPTIONS = ["unassigned", "IGV", "OGV", "IGTE", "B2C", "OGTA", "TM", "F&L"];
 var RANK_OPTIONS = ["member", "mm", "vp"];
 var COUNCIL_OPTIONS = ["none", "oc", "vp"];
 var ROLE_OPTIONS = ["user", "organizer", "admin"];
+var isAdminUser = false;
 
 function wireTabs() {
   var tabs = document.querySelectorAll(".tab");
@@ -274,7 +275,7 @@ async function updateAdminAssignments(uid, nextFunction, nextRank, nextCouncilRo
 async function refreshCouncilData() {
   var userMap = await fetchUserMap();
   await loadCouncilMembers(userMap);
-  if (adminTools && !adminTools.classList.contains("hidden")) {
+  if (isAdminUser) {
     var profilesMap = await fetchProfilesMap();
     var usersList = Object.keys(userMap).map(function (uid) {
       var data = userMap[uid] || {};
@@ -321,6 +322,7 @@ async function guardAndInit(user) {
 
   try {
     var data = await getCurrentUserData();
+    isAdminUser = data.systemRole === "admin";
     console.log("UID:", data.uid);
     console.log("systemRole:", data.systemRole);
     console.log("Admin access:", data.systemRole === "admin");

@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -7,6 +8,7 @@ import {
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
   getFirestore,
   doc,
@@ -14,15 +16,19 @@ import {
   setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import {
-  getStorage
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBRp6WRxRpVTsj6BCPp1yl6IfBbTQu7lqI",
   authDomain: "event-app-77858.firebaseapp.com",
   projectId: "event-app-77858",
-  storageBucket: "event-app-77858.firebasestorage.app",
+  storageBucket: "event-app-77858.appspot.com",
   messagingSenderId: "305729526296",
   appId: "1:305729526296:web:9d49c4694e05b0d3d4816d"
 };
@@ -34,8 +40,11 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-console.log("If you see OAuth domain warnings, add 127.0.0.1 and localhost in Firebase Console -> Authentication -> Settings -> Authorized domains.");
+console.log(
+  "If you see OAuth domain warnings, add 127.0.0.1 and localhost in Firebase Console -> Authentication -> Settings -> Authorized domains."
+);
 
+// ✅ re-export auth funcs
 export {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -44,14 +53,20 @@ export {
   onAuthStateChanged
 };
 
+// ✅ re-export firestore helpers so other files can import only from firebase.js
+export { doc, getDoc, setDoc, serverTimestamp };
+
+// ✅ re-export storage helpers so profile.js DOES NOT import from CDN directly
+export { ref, uploadBytes, getDownloadURL };
+
 async function ensureProfileDoc(uid) {
-  if (!uid) {
-    return;
-  }
-  var profileRef = doc(db, "profiles", uid);
-  var profileSnap = await getDoc(profileRef);
+  if (!uid) return;
+
+  const profileRef = doc(db, "profiles", uid);
+  const profileSnap = await getDoc(profileRef);
+
   if (!profileSnap.exists()) {
-    var profilePayload = {
+    const profilePayload = {
       age: "",
       funFact: "",
       photoURL: "",
@@ -67,15 +82,16 @@ async function ensureProfileDoc(uid) {
 }
 
 export async function getCurrentUserData() {
-  var user = auth.currentUser;
-  if (!user) {
-    throw new Error("No authenticated user.");
-  }
+  const user = auth.currentUser;
+  if (!user) throw new Error("No authenticated user.");
 
-  var userRef = doc(db, "users", user.uid);
-  var snap = await getDoc(userRef);
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+
+  // ⚠️ تعديل مهم: systemRole الافتراضي يبقى "user" مش "member"
+  // عشان يركب مع الـ rules اللي بتستخدم user/admin/organizer
   if (!snap.exists()) {
-    var payload = {
+    const payload = {
       email: user.email || "",
       name: user.displayName || "",
       systemRole: "user",
@@ -84,6 +100,7 @@ export async function getCurrentUserData() {
     };
     await setDoc(userRef, payload);
     await ensureProfileDoc(user.uid);
+
     return {
       uid: user.uid,
       email: payload.email,
@@ -92,8 +109,9 @@ export async function getCurrentUserData() {
     };
   }
 
-  var data = snap.data() || {};
+  const data = snap.data() || {};
   await ensureProfileDoc(user.uid);
+
   return {
     uid: user.uid,
     email: data.email || user.email || "",
@@ -103,12 +121,14 @@ export async function getCurrentUserData() {
 }
 
 export async function getOrganizerData(uid) {
-  if (!uid) {
-    return null;
+  if (!uid) return null;
+
+  try {
+    const orgSnap = await getDoc(doc(db, "organizers", uid));
+    if (!orgSnap.exists()) return null;
+    return orgSnap.data() || null;
+  } catch (error) {
+    if (error && error.code === "permission-denied") return null;
+    throw error;
   }
-  var orgSnap = await getDoc(doc(db, "organizers", uid));
-  if (!orgSnap.exists()) {
-    return null;
-  }
-  return orgSnap.data() || null;
 }
