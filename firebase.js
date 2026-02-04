@@ -17,12 +17,6 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBRp6WRxRpVTsj6BCPp1yl6IfBbTQu7lqI",
@@ -38,7 +32,6 @@ console.log("Firebase initialized");
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 
 console.log(
   "If you see OAuth domain warnings, add 127.0.0.1 and localhost in Firebase Console -> Authentication -> Settings -> Authorized domains."
@@ -56,8 +49,6 @@ export {
 // ✅ re-export firestore helpers so other files can import only from firebase.js
 export { doc, getDoc, setDoc, serverTimestamp };
 
-// ✅ re-export storage helpers so profile.js DOES NOT import from CDN directly
-export { ref, uploadBytes, getDownloadURL };
 
 async function ensureProfileDoc(uid) {
   if (!uid) return;
@@ -95,6 +86,7 @@ export async function getCurrentUserData() {
       email: user.email || "",
       name: user.displayName || "",
       systemRole: "user",
+      points: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };

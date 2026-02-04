@@ -27,16 +27,16 @@
 
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-number">12</div>
+          <div class="stat-number" id="agenda-total">0</div>
           <div class="stat-label">Total</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number blue">5</div>
+          <div class="stat-number blue" id="agenda-upcoming">0</div>
           <div class="stat-label">Upcoming</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number green">2</div>
-          <div class="stat-label">Today</div>
+          <div class="stat-number green" id="agenda-past">0</div>
+          <div class="stat-label">Past</div>
         </div>
       </div>
 
@@ -60,7 +60,7 @@
         <img src="icons/council.svg" alt="Council" />
         <span>Council</span>
       </a>
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="games.html">
         <img src="icons/GamesIcon.svg" alt="Games" />
         <span>Games</span>
       </a>
@@ -107,6 +107,7 @@
         </div>
         <div class="agenda-modal-actions">
           <button type="button" class="agenda-cancel" data-modal-close>Cancel</button>
+          <button type="button" class="agenda-delete" id="agenda-delete" hidden>Delete</button>
           <button type="submit" class="agenda-submit">Add</button>
         </div>
       </form>

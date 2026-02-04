@@ -369,6 +369,12 @@ body {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.agenda-delete {
+  color: #ffd2c9;
+  border-color: rgba(255, 120, 120, 0.35);
+  background: rgba(120, 30, 30, 0.35);
+}
+
 .bottom-nav {
   position: fixed;
   left: 0;

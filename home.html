@@ -31,26 +31,26 @@
       <section class="home-section">
         <div class="section-head">
           <h2>Current Session</h2>
-          <span class="pill">Live</span>
+          <span class="pill" id="home-session-status">Live</span>
         </div>
 
         <div class="session-card">
           <div class="tag-row">
-            <span class="tag">Happening Now</span>
-            <span class="tag muted">Meeting</span>
+            <span class="tag" id="home-session-tag">Happening Now</span>
+            <span class="tag muted" id="home-session-type">Agenda</span>
           </div>
-          <h3>Executive Council Meeting</h3>
-          <p class="muted-text">
+          <h3 id="home-session-title">Executive Council Meeting</h3>
+          <p class="muted-text" id="home-session-desc">
             Monthly strategic planning and decision-making session
           </p>
           <div class="session-meta">
             <div class="meta-item">
               <img src="icons/calendar-black.svg" alt="Time" />
-              <span>14:00 - 16:00</span>
+              <span id="home-session-time">14:00 - 16:00</span>
             </div>
             <div class="meta-item">
               <img src="icons/council.svg" alt="Location" />
-              <span>Grand Hall A</span>
+              <span id="home-session-location">Grand Hall A</span>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
       <section class="home-section">
         <div class="section-head">
           <h2>Your Progress</h2>
-          <span class="muted-text">2/4 Completed</span>
+          <span class="muted-text" id="home-progress-text">0/0 Completed</span>
         </div>
 
         <div class="progress-card">
@@ -68,14 +68,9 @@
             <img src="icons/GamesIcon.svg" alt="Trophy" class="trophy" />
           </div>
           <div class="progress-bar">
-            <span class="progress-fill" style="width: 50%;"></span>
+            <span class="progress-fill" id="home-progress-fill" style="width: 0%;"></span>
           </div>
-          <ul class="task-list">
-            <li class="task done">Complete Profile</li>
-            <li class="task done">Visit 3 Booths</li>
-            <li class="task">Join a Networking Table</li>
-            <li class="task">Submit Feedback</li>
-          </ul>
+          <ul class="task-list" id="home-task-list"></ul>
         </div>
       </section>
 
@@ -84,77 +79,7 @@
           <h2>Leaderboard</h2>
         </div>
 
-        <div class="leaderboard-card">
-          <div class="leader-row highlight">
-            <div class="leader-left">
-              <div class="avatar">A</div>
-              <div>
-                <div class="leader-name">Ahmed Hassan</div>
-                <div class="leader-rank">Rank #1</div>
-              </div>
-            </div>
-            <div class="leader-points">
-              <div class="points">1250</div>
-              <div class="label">Points</div>
-            </div>
-          </div>
-
-          <div class="leader-row">
-            <div class="leader-left">
-              <div class="avatar">S</div>
-              <div>
-                <div class="leader-name">Sara Ali</div>
-                <div class="leader-rank">Rank #2</div>
-              </div>
-            </div>
-            <div class="leader-points">
-              <div class="points">1100</div>
-              <div class="label">Points</div>
-            </div>
-          </div>
-
-          <div class="leader-row">
-            <div class="leader-left">
-              <div class="avatar">O</div>
-              <div>
-                <div class="leader-name">Omar Khaled</div>
-                <div class="leader-rank">Rank #3</div>
-              </div>
-            </div>
-            <div class="leader-points">
-              <div class="points">950</div>
-              <div class="label">Points</div>
-            </div>
-          </div>
-
-          <div class="leader-row">
-            <div class="leader-left">
-              <div class="avatar">N</div>
-              <div>
-                <div class="leader-name">Nour El-Din</div>
-                <div class="leader-rank">Rank #4</div>
-              </div>
-            </div>
-            <div class="leader-points">
-              <div class="points">800</div>
-              <div class="label">Points</div>
-            </div>
-          </div>
-
-          <div class="leader-row">
-            <div class="leader-left">
-              <div class="avatar">L</div>
-              <div>
-                <div class="leader-name">Layla Mahmoud</div>
-                <div class="leader-rank">Rank #5</div>
-              </div>
-            </div>
-            <div class="leader-points">
-              <div class="points">750</div>
-              <div class="label">Points</div>
-            </div>
-          </div>
-        </div>
+        <div class="leaderboard-card" id="home-leaderboard"></div>
       </section>
     </div>
 
@@ -171,7 +96,7 @@
         <img src="icons/council.svg" alt="Council" />
         <span>Council</span>
       </a>
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="games.html">
         <img src="icons/GamesIcon.svg" alt="Games" />
         <span>Games</span>
       </a>

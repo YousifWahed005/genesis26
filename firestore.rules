@@ -14,16 +14,35 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.systemRole == "admin";
     }
 
+    function isOrganizer() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.systemRole == "organizer";
+    }
+
+    function isVp() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.rank == "vp";
+    }
+
     match /users/{uid} {
       allow read: if isSignedIn();
       allow create: if isSignedIn() && request.auth.uid == uid && (
         (isAdminEmail() && request.resource.data.systemRole == "admin") ||
-        (!isAdminEmail() && request.resource.data.systemRole == "member")
+        (!isAdminEmail() && request.resource.data.systemRole in ["user", "member"])
       );
       allow update, delete: if isAdmin() || (
         isSignedIn() &&
         request.auth.uid == uid &&
         request.resource.data.systemRole == resource.data.systemRole
+      ) || (
+        isSignedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.diff(resource.data).changedKeys()
+          .hasOnly(["name", "points", "updatedAt"])
+      ) || (
+        (isOrganizer() || isVp()) &&
+        request.resource.data.diff(resource.data).changedKeys()
+          .hasOnly(["points", "updatedAt"])
       );
     }
 
@@ -39,7 +58,7 @@ service cloud.firestore {
         request.auth.uid == uid &&
         request.resource.data.function == resource.data.function &&
         request.resource.data.diff(resource.data).changedKeys()
-          .hasOnly(["age", "funFact", "photoURL", "updatedAt"])
+          .hasOnly(["age", "funFact", "photoURL", "updatedAt", "photoUpdatedAt", "displayName"])
       );
     }
 
@@ -49,6 +68,20 @@ service cloud.firestore {
         isSignedIn() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.systemRole in ["admin", "organizer"]
       );
+    }
+
+    match /gameTasks/{taskId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin() || isOrganizer() || isVp();
+    }
+
+    match /users/{uid}/tasks/{taskId} {
+      allow read, create, update, delete: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid}/pointsLog/{logId} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin() || isOrganizer() || isVp());
+      allow create: if isAdmin() || isOrganizer() || isVp();
     }
 
     match /organizers/{uid} {

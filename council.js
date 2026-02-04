@@ -4,6 +4,7 @@ import {
   getDocs,
   doc,
   setDoc,
+  deleteDoc,
   query,
   where,
   serverTimestamp
@@ -19,6 +20,68 @@ var RANK_OPTIONS = ["member", "mm", "vp"];
 var COUNCIL_OPTIONS = ["none", "oc", "vp"];
 var ROLE_OPTIONS = ["user", "organizer", "admin"];
 var isAdminUser = false;
+var currentAdminUid = "";
+var councilModal = document.getElementById("council-modal");
+var councilModalClose = document.getElementById("council-modal-close");
+var councilModalCloseBtn = document.getElementById("council-modal-close-btn");
+var councilModalAvatar = document.getElementById("council-modal-avatar");
+var councilModalName = document.getElementById("council-modal-name");
+var councilModalRole = document.getElementById("council-modal-role");
+var councilModalAge = document.getElementById("council-modal-age");
+var councilModalFunFact = document.getElementById("council-modal-funfact");
+
+function ensureCouncilModal() {
+  if (councilModal && councilModal.querySelector(".council-modal-card")) {
+    return;
+  }
+
+  var modal = document.createElement("div");
+  modal.className = "council-modal";
+  modal.id = "council-modal";
+  modal.hidden = true;
+  modal.innerHTML =
+    "<div class=\"council-modal-backdrop\" id=\"council-modal-close\"></div>" +
+    "<div class=\"council-modal-card\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"council-modal-name\">" +
+    "<button type=\"button\" class=\"council-modal-close\" id=\"council-modal-close-btn\">&times;</button>" +
+    "<div class=\"council-modal-avatar\" id=\"council-modal-avatar\">A</div>" +
+    "<h3 id=\"council-modal-name\">Member Name</h3>" +
+    "<span class=\"council-modal-role\" id=\"council-modal-role\">Council Role</span>" +
+    "<div class=\"council-modal-section\">" +
+    "<span class=\"council-modal-label\">Age</span>" +
+    "<strong id=\"council-modal-age\">--</strong>" +
+    "</div>" +
+    "<div class=\"council-modal-section\">" +
+    "<span class=\"council-modal-label\">Fun Fact</span>" +
+    "<p id=\"council-modal-funfact\">No fun fact yet.</p>" +
+    "</div>" +
+    "</div>";
+  document.body.appendChild(modal);
+
+  councilModal = document.getElementById("council-modal");
+  councilModalClose = document.getElementById("council-modal-close");
+  councilModalCloseBtn = document.getElementById("council-modal-close-btn");
+  councilModalAvatar = document.getElementById("council-modal-avatar");
+  councilModalName = document.getElementById("council-modal-name");
+  councilModalRole = document.getElementById("council-modal-role");
+  councilModalAge = document.getElementById("council-modal-age");
+  councilModalFunFact = document.getElementById("council-modal-funfact");
+}
+
+ensureCouncilModal();
+
+function buildPhotoUrl(url, updatedAt) {
+  if (!url) return url;
+  var version = "";
+  if (updatedAt && typeof updatedAt.toMillis === "function") {
+    version = String(updatedAt.toMillis());
+  } else if (updatedAt instanceof Date) {
+    version = String(updatedAt.getTime());
+  } else if (typeof updatedAt === "number") {
+    version = String(updatedAt);
+  }
+  if (!version) return url;
+  return url + (url.indexOf("?") === -1 ? "?v=" : "&v=") + version;
+}
 
 function wireTabs() {
   var tabs = document.querySelectorAll(".tab");
@@ -68,7 +131,8 @@ function createCouncilCard(member) {
 
   if (member.photoURL) {
     avatar.classList.add("photo");
-    avatar.style.backgroundImage = "url(\"" + member.photoURL + "\")";
+    var cacheBusted = buildPhotoUrl(member.photoURL, member.photoUpdatedAt || member.updatedAt);
+    avatar.style.backgroundImage = "url(\"" + cacheBusted + "\")";
     avatar.textContent = "";
   } else {
     avatar.textContent = member.initials || "?";
@@ -88,6 +152,10 @@ function createCouncilCard(member) {
   card.appendChild(name);
   card.appendChild(ageLine);
   card.appendChild(funFact);
+
+  card.addEventListener("click", function () {
+    openCouncilModal(member);
+  });
 
   return card;
 }
@@ -129,8 +197,13 @@ async function buildMembersForCouncilRole(role, userMap) {
   snapshot.forEach(function (profileSnap) {
     var profileData = profileSnap.data() || {};
     var uid = profileSnap.id;
-    var userData = userMap[uid] || {};
-    var displayName = userData.name || userData.email || "Member";
+    var userData = userMap ? (userMap[uid] || {}) : {};
+    var displayName =
+      userData.name ||
+      userData.email ||
+      profileData.displayName ||
+      profileData.name ||
+      "Member";
     var initials = displayName
       .split(" ")
       .map(function (part) { return part.charAt(0); })
@@ -142,6 +215,9 @@ async function buildMembersForCouncilRole(role, userMap) {
       uid: uid,
       displayName: displayName,
       photoURL: profileData.photoURL || "",
+      photoUpdatedAt: profileData.photoUpdatedAt || null,
+      updatedAt: profileData.updatedAt || null,
+      councilRole: role,
       age: profileData.age,
       funFact: profileData.funFact || "",
       initials: initials
@@ -203,10 +279,22 @@ function renderAdminUsers(users, profiles) {
       initials = user.email.charAt(0).toUpperCase();
     }
 
-    card.innerHTML =
-      "<div class=\"avatar\">" + initials + "</div>" +
-      "<h3>" + (user.name || "Unnamed") + "</h3>" +
-      "<p>" + (user.email || "No email") + "</p>";
+    var avatar = document.createElement("div");
+    avatar.className = "avatar";
+    if (profileData.photoURL) {
+      avatar.classList.add("photo");
+      var cacheBusted = buildPhotoUrl(profileData.photoURL, profileData.photoUpdatedAt || profileData.updatedAt);
+      avatar.style.backgroundImage = "url(\"" + cacheBusted + "\")";
+      avatar.textContent = "";
+    } else {
+      avatar.textContent = initials;
+    }
+
+    var nameEl = document.createElement("h3");
+    nameEl.textContent = user.name || "Unnamed";
+
+    var emailEl = document.createElement("p");
+    emailEl.textContent = user.email || "No email";
 
     var functionSelect = createSelect(FUNCTION_OPTIONS, profileData.function || "unassigned");
     var rankSelect = createSelect(RANK_OPTIONS, profileData.rank || "member");
@@ -221,11 +309,23 @@ function renderAdminUsers(users, profiles) {
       updateAdminAssignments(user.uid, functionSelect.value, rankSelect.value, councilSelect.value, roleSelect.value);
     });
 
+    var deleteButton = document.createElement("button");
+    deleteButton.className = "tab admin-danger";
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete User";
+    deleteButton.addEventListener("click", function () {
+      deleteUserAccount(user.uid, user.email || user.name || "this user");
+    });
+
+    card.appendChild(avatar);
+    card.appendChild(nameEl);
+    card.appendChild(emailEl);
     card.appendChild(functionSelect);
     card.appendChild(rankSelect);
     card.appendChild(councilSelect);
     card.appendChild(roleSelect);
     card.appendChild(assignButton);
+    card.appendChild(deleteButton);
     adminUsersPanel.appendChild(card);
   });
 
@@ -272,10 +372,84 @@ async function updateAdminAssignments(uid, nextFunction, nextRank, nextCouncilRo
   }
 }
 
+function getMemberRoleLabel(member) {
+  if (!member || !member.councilRole) return "Member";
+  if (member.councilRole === "vp") return "Vice President";
+  if (member.councilRole === "oc") return "Organizer";
+  return member.councilRole;
+}
+
+function openCouncilModal(member) {
+  if (!councilModal || !member) return;
+
+  if (councilModalAvatar) {
+    councilModalAvatar.classList.remove("photo");
+    councilModalAvatar.style.backgroundImage = "";
+    if (member.photoURL) {
+      var cacheBusted = buildPhotoUrl(member.photoURL, member.photoUpdatedAt || member.updatedAt);
+      councilModalAvatar.classList.add("photo");
+      councilModalAvatar.style.backgroundImage = "url(\"" + cacheBusted + "\")";
+      councilModalAvatar.textContent = "";
+    } else {
+      councilModalAvatar.textContent = member.initials || "?";
+    }
+  }
+
+  if (councilModalName) {
+    councilModalName.textContent = member.displayName || "Member";
+  }
+
+  if (councilModalRole) {
+    councilModalRole.textContent = getMemberRoleLabel(member);
+  }
+
+  if (councilModalAge) {
+    councilModalAge.textContent = member.age && member.age !== "" ? member.age + " years" : "--";
+  }
+
+  if (councilModalFunFact) {
+    councilModalFunFact.textContent = member.funFact || "No fun fact yet.";
+  }
+
+  councilModal.hidden = false;
+}
+
+function closeCouncilModal() {
+  if (!councilModal) return;
+  councilModal.hidden = true;
+}
+
+async function deleteUserAccount(uid, label) {
+  if (!uid) {
+    return;
+  }
+
+  if (uid === currentAdminUid) {
+    alert("You cannot delete your own account.");
+    return;
+  }
+
+  if (!confirm("Delete " + label + " from Firestore?")) {
+    return;
+  }
+
+  try {
+    await Promise.all([
+      deleteDoc(doc(db, "users", uid)),
+      deleteDoc(doc(db, "profiles", uid)),
+      deleteDoc(doc(db, "organizers", uid))
+    ]);
+    await refreshCouncilData();
+  } catch (error) {
+    console.error("Delete user failed", error);
+    alert(error.message);
+  }
+}
+
 async function refreshCouncilData() {
-  var userMap = await fetchUserMap();
-  await loadCouncilMembers(userMap);
   if (isAdminUser) {
+    var userMap = await fetchUserMap();
+    await loadCouncilMembers(userMap);
     var profilesMap = await fetchProfilesMap();
     var usersList = Object.keys(userMap).map(function (uid) {
       var data = userMap[uid] || {};
@@ -287,7 +461,10 @@ async function refreshCouncilData() {
       };
     });
     renderAdminUsers(usersList, profilesMap);
+    return;
   }
+
+  await loadCouncilMembers(null);
 }
 
 function hideAdminPanel() {
@@ -323,6 +500,7 @@ async function guardAndInit(user) {
   try {
     var data = await getCurrentUserData();
     isAdminUser = data.systemRole === "admin";
+    currentAdminUid = data.uid || "";
     console.log("UID:", data.uid);
     console.log("systemRole:", data.systemRole);
     console.log("Admin access:", data.systemRole === "admin");
@@ -344,4 +522,22 @@ async function guardAndInit(user) {
 
 onAuthStateChanged(auth, function (user) {
   guardAndInit(user);
+});
+
+if (councilModalClose) {
+  councilModalClose.addEventListener("click", function () {
+    closeCouncilModal();
+  });
+}
+
+if (councilModalCloseBtn) {
+  councilModalCloseBtn.addEventListener("click", function () {
+    closeCouncilModal();
+  });
+}
+
+window.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closeCouncilModal();
+  }
 });

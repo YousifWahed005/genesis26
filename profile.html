@@ -128,7 +128,7 @@
         <img src="icons/council.svg" alt="Council" />
         <span>Council</span>
       </a>
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="games.html">
         <img src="icons/GamesIcon.svg" alt="Games" />
         <span>Games</span>
       </a>
@@ -138,6 +138,29 @@
       </a>
     </nav>
   </main>
+
+  <div class="profile-crop-modal" id="photo-crop-modal" hidden>
+    <div class="profile-crop-backdrop" id="photo-crop-close"></div>
+    <div class="profile-crop-card" role="dialog" aria-modal="true" aria-labelledby="photo-crop-title">
+      <div class="profile-crop-header">
+        <h3 id="photo-crop-title">Crop Photo</h3>
+        <button type="button" class="profile-crop-close" id="photo-crop-close-btn">&times;</button>
+      </div>
+      <div class="profile-crop-body">
+        <div class="profile-crop-frame">
+          <canvas id="photo-crop-canvas" width="260" height="260"></canvas>
+        </div>
+        <label class="profile-crop-zoom">
+          <span>Zoom</span>
+          <input id="photo-crop-zoom" type="range" min="1" max="3" step="0.01" value="1" />
+        </label>
+      </div>
+      <div class="profile-crop-actions">
+        <button type="button" class="profile-crop-btn" id="photo-crop-cancel">Cancel</button>
+        <button type="button" class="profile-crop-btn primary" id="photo-crop-save">Use Photo</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="./profile.js"></script>
 

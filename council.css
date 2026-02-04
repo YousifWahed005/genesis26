@@ -285,3 +285,130 @@ body {
 .nav-item.active img {
   filter: none;
 }
+
+.council-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+}
+
+.council-modal[hidden] {
+  display: none;
+}
+
+.council-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  animation: councilFadeIn 0.22s ease forwards;
+}
+
+.council-modal-card {
+  position: relative;
+  z-index: 9;
+  width: min(92vw, 380px);
+  margin: 90px auto 0;
+  background: linear-gradient(180deg, rgba(41, 32, 22, 0.98), rgba(26, 20, 14, 0.98));
+  border: 1px solid rgba(242, 195, 58, 0.4);
+  border-radius: 22px;
+  padding: 20px 18px 18px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  animation: councilPopIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.council-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.council-modal-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  margin: 4px auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #f7e39a, #f0b100);
+  color: #1b1200;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.council-modal-avatar.photo {
+  background-size: cover;
+  background-position: center;
+  color: transparent;
+}
+
+.council-modal-card h3 {
+  margin: 6px 0 6px;
+  font-size: 18px;
+  color: #f2c33a;
+}
+
+.council-modal-role {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(242, 195, 58, 0.18);
+  color: #f2c33a;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.council-modal-section {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(242, 195, 58, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.council-modal-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+
+#council-modal-age {
+  color: #f2c33a;
+  font-size: 16px;
+}
+
+#council-modal-funfact {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes councilFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes councilPopIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
