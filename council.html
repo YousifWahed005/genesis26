@@ -59,7 +59,7 @@
         <img src="icons/council.svg" alt="Council" />
         <span>Council</span>
       </a>
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="games.html">
         <img src="icons/GamesIcon.svg" alt="Games" />
         <span>Games</span>
       </a>
@@ -69,6 +69,24 @@
       </a>
     </nav>
   </main>
+
+  <div class="council-modal" id="council-modal" hidden>
+    <div class="council-modal-backdrop" id="council-modal-close"></div>
+    <div class="council-modal-card" role="dialog" aria-modal="true" aria-labelledby="council-modal-name">
+      <button type="button" class="council-modal-close" id="council-modal-close-btn">&times;</button>
+      <div class="council-modal-avatar" id="council-modal-avatar">A</div>
+      <h3 id="council-modal-name">Member Name</h3>
+      <span class="council-modal-role" id="council-modal-role">Council Role</span>
+      <div class="council-modal-section">
+        <span class="council-modal-label">Age</span>
+        <strong id="council-modal-age">--</strong>
+      </div>
+      <div class="council-modal-section">
+        <span class="council-modal-label">Fun Fact</span>
+        <p id="council-modal-funfact">No fun fact yet.</p>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="./council.js"></script>
 

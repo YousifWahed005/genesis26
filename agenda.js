@@ -7,7 +7,8 @@ import {
   addDoc,
   serverTimestamp,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 var agendaList = document.getElementById("agenda-list");
@@ -23,8 +24,73 @@ var agendaStart = document.getElementById("agenda-start");
 var agendaEnd = document.getElementById("agenda-end");
 var agendaModalTitle = document.getElementById("agenda-modal-title");
 var agendaSubmitButton = document.querySelector(".agenda-submit");
+var agendaDeleteButton = document.getElementById("agenda-delete");
+var agendaTotalTarget = document.getElementById("agenda-total");
+var agendaUpcomingTarget = document.getElementById("agenda-upcoming");
+var agendaPastTarget = document.getElementById("agenda-past");
 var editingAgendaId = null;
 var canEditAgenda = false;
+
+function getCurrentAgendaDay() {
+  var urlParams = new URLSearchParams(window.location.search || "");
+  var fromQuery = parseInt(urlParams.get("day"), 10);
+  if (!isNaN(fromQuery) && fromQuery >= 1 && fromQuery <= 3) {
+    return fromQuery;
+  }
+
+  var fromStorage = parseInt(localStorage.getItem("agendaDay"), 10);
+  if (!isNaN(fromStorage) && fromStorage >= 1 && fromStorage <= 3) {
+    return fromStorage;
+  }
+
+  return 1;
+}
+
+function toMinutes(timeValue) {
+  if (!timeValue || typeof timeValue !== "string") return null;
+  var parts = timeValue.split(":");
+  if (parts.length < 2) return null;
+  var hours = parseInt(parts[0], 10);
+  var minutes = parseInt(parts[1], 10);
+  if (isNaN(hours) || isNaN(minutes)) return null;
+  return (hours * 60) + minutes;
+}
+
+function updateAgendaStats(items) {
+  if (!agendaTotalTarget || !agendaUpcomingTarget || !agendaPastTarget) {
+    return;
+  }
+
+  var currentDay = getCurrentAgendaDay();
+  var now = new Date();
+  var nowMinutes = (now.getHours() * 60) + now.getMinutes();
+
+  var dayItems = items.filter(function (item) {
+    return item.day === currentDay;
+  });
+
+  var upcomingCount = 0;
+  var pastCount = 0;
+
+  dayItems.forEach(function (item) {
+    var startMinutes = toMinutes(item.startTime);
+    var endMinutes = toMinutes(item.endTime);
+
+    if (endMinutes !== null && nowMinutes > endMinutes) {
+      pastCount += 1;
+      return;
+    }
+
+    if (startMinutes !== null && nowMinutes < startMinutes) {
+      upcomingCount += 1;
+      return;
+    }
+  });
+
+  agendaTotalTarget.textContent = String(dayItems.length);
+  agendaUpcomingTarget.textContent = String(upcomingCount);
+  agendaPastTarget.textContent = String(pastCount);
+}
 
 function renderAgenda(items) {
   if (!agendaList) {
@@ -116,6 +182,7 @@ function fetchAgenda() {
         endTime: data.endTime || ""
       });
     });
+    updateAgendaStats(items);
     renderAgenda(items);
   });
 }
@@ -194,6 +261,10 @@ function closeAgendaModal() {
   if (agendaForm) {
     agendaForm.reset();
   }
+  if (agendaDeleteButton) {
+    agendaDeleteButton.hidden = true;
+    agendaDeleteButton.disabled = false;
+  }
 }
 
 function openAgendaModal(item) {
@@ -207,6 +278,10 @@ function openAgendaModal(item) {
     }
     if (agendaSubmitButton) {
       agendaSubmitButton.textContent = "Save";
+    }
+    if (agendaDeleteButton) {
+      agendaDeleteButton.hidden = false;
+      agendaDeleteButton.disabled = false;
     }
     if (agendaTopic) {
       agendaTopic.value = item.topic || "";
@@ -236,6 +311,10 @@ function openAgendaModal(item) {
     }
     if (agendaSubmitButton) {
       agendaSubmitButton.textContent = "Add";
+    }
+    if (agendaDeleteButton) {
+      agendaDeleteButton.hidden = true;
+      agendaDeleteButton.disabled = false;
     }
   }
   agendaModal.hidden = false;
@@ -285,6 +364,39 @@ function submitAgenda(user) {
       console.error(error);
       alert(error.message);
     });
+}
+
+function deleteAgendaItem() {
+  if (!editingAgendaId) {
+    return;
+  }
+
+  if (!confirm("Delete this agenda item?")) {
+    return;
+  }
+
+  if (agendaDeleteButton) {
+    agendaDeleteButton.disabled = true;
+  }
+
+  deleteDoc(doc(db, "agenda", editingAgendaId))
+    .then(function () {
+      closeAgendaModal();
+      return fetchAgenda();
+    })
+    .catch(function (error) {
+      console.error(error);
+      alert(error.message);
+      if (agendaDeleteButton) {
+        agendaDeleteButton.disabled = false;
+      }
+    });
+}
+
+if (agendaDeleteButton) {
+  agendaDeleteButton.addEventListener("click", function () {
+    deleteAgendaItem();
+  });
 }
 
 

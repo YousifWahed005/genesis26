@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genesis 26 - Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="games.css"/>
+</head>
+<body>
+
+  <main class="screen games-screen">
+    <div class="overlay"></div>
+
+    <div class="games">
+      <div class="loading-status" id="games-loading">Loading...</div>
+      <header class="games-header">
+        <div>
+          <h1>Games</h1>
+          <p class="games-subtitle">Challenges and points</p>
+        </div>
+      </header>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="challenges">Challenges</button>
+        <button class="tab" data-tab="session">Session Points</button>
+      </div>
+
+      <section class="games-panel" data-panel="challenges" id="games-challenges">
+        <div class="panel-head">
+          <h2>Active Challenges</h2>
+          <button class="pill" id="add-task-btn" type="button" hidden>Add Challenge</button>
+        </div>
+        <div class="task-grid" id="task-grid"></div>
+      </section>
+
+      <section class="games-panel hidden" data-panel="session" id="games-session">
+        <div class="panel-head">
+          <h2>Give Session Points</h2>
+        </div>
+        <div class="session-card" id="session-card">
+          <p class="muted-text">Admins / organizers / VPs can award points.</p>
+          <label class="field">
+            <span>User</span>
+            <input type="text" id="session-user" placeholder="Search by name or email" list="session-users" />
+            <datalist id="session-users"></datalist>
+          </label>
+          <label class="field">
+            <span>Points</span>
+            <input type="number" id="session-points" min="1" value="10" />
+          </label>
+          <label class="field">
+            <span>Reason</span>
+            <input type="text" id="session-reason" placeholder="Sharing / Answered question" />
+          </label>
+          <button class="btn" type="button" id="session-submit">Give Points</button>
+          <p class="hint" id="session-hint"></p>
+        </div>
+      </section>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="home.html">
+        <img src="icons/HomeIcon.svg" alt="Home" />
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="agenda.html">
+        <img src="icons/calendar-black.svg" alt="Agenda" />
+        <span>Agenda</span>
+      </a>
+      <a class="nav-item" href="council.html">
+        <img src="icons/council.svg" alt="Council" />
+        <span>Council</span>
+      </a>
+      <a class="nav-item active" href="games.html">
+        <img src="icons/GamesIcon.svg" alt="Games" />
+        <span>Games</span>
+      </a>
+      <a class="nav-item" href="profile.html">
+        <img src="icons/ProfileIcon.svg" alt="Profile" />
+        <span>Profile</span>
+      </a>
+    </nav>
+  </main>
+
+  <div class="task-modal" id="task-modal" hidden>
+    <div class="task-modal-backdrop" data-task-close></div>
+    <div class="task-modal-card" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+      <div class="task-modal-header">
+        <h3 id="task-modal-title">Add Challenge</h3>
+        <button type="button" class="task-modal-close" data-task-close>&times;</button>
+      </div>
+      <form id="task-form" class="task-modal-body">
+        <label class="field">
+          <span>Title</span>
+          <input type="text" id="task-title" required />
+        </label>
+        <label class="field">
+          <span>Points</span>
+          <input type="number" id="task-points" min="1" value="10" required />
+        </label>
+        <label class="field toggle">
+          <span>Active</span>
+          <input type="checkbox" id="task-active" checked />
+        </label>
+        <div class="task-modal-actions">
+          <button type="button" class="task-cancel" data-task-close>Cancel</button>
+          <button type="submit" class="task-submit" id="task-submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./games.js"></script>
+
+</body>
+</html>

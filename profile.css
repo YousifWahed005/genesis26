@@ -95,8 +95,10 @@ body {
 }
 
 .avatar.photo {
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: #111;
   color: transparent;
 }
 
@@ -283,4 +285,116 @@ body {
 
 .nav-item.active img {
   filter: none;
+}
+
+.profile-crop-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+}
+
+.profile-crop-modal[hidden] {
+  display: none;
+}
+
+.profile-crop-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.profile-crop-card {
+  position: relative;
+  z-index: 9;
+  width: min(92vw, 380px);
+  margin: 80px auto 0;
+  background: linear-gradient(180deg, rgba(41, 32, 22, 0.98), rgba(26, 20, 14, 0.98));
+  border: 1px solid rgba(242, 195, 58, 0.35);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.profile-crop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.profile-crop-header h3 {
+  margin: 0;
+  color: #f2c33a;
+  font-size: 16px;
+}
+
+.profile-crop-close {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile-crop-body {
+  display: grid;
+  gap: 12px;
+}
+
+.profile-crop-frame {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(242, 195, 58, 0.35);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+}
+
+#photo-crop-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: #0b0b0b;
+  touch-action: none;
+  cursor: grab;
+}
+
+#photo-crop-canvas:active {
+  cursor: grabbing;
+}
+
+.profile-crop-zoom {
+  display: grid;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.profile-crop-zoom input {
+  width: 100%;
+}
+
+.profile-crop-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.profile-crop-btn {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 195, 58, 0.3);
+  background: transparent;
+  color: #f2c33a;
+  font-weight: 600;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.profile-crop-btn.primary {
+  background: linear-gradient(90deg, #f0b100, #f7d46b);
+  color: #1b1200;
+  border-color: transparent;
 }
