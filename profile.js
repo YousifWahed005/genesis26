@@ -110,8 +110,8 @@ function buildPhotoUrl(url, updatedAt) {
   return url + (url.indexOf("?") === -1 ? "?v=" : "&v=") + version;
 }
 
-// 5MB
-var MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+// 25MB
+var MAX_PHOTO_BYTES = 25 * 1024 * 1024;
 
 function setRoleText(systemRole) {
   var label =

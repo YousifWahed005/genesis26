@@ -20,6 +20,20 @@ var progressFill = document.getElementById("home-progress-fill");
 var taskList = document.getElementById("home-task-list");
 var leaderboardTarget = document.getElementById("home-leaderboard");
 
+function buildPhotoUrl(url, updatedAt) {
+  if (!url) return url;
+  var version = "";
+  if (updatedAt && typeof updatedAt.toMillis === "function") {
+    version = String(updatedAt.toMillis());
+  } else if (updatedAt instanceof Date) {
+    version = String(updatedAt.getTime());
+  } else if (typeof updatedAt === "number") {
+    version = String(updatedAt);
+  }
+  if (!version) return url;
+  return url + (url.indexOf("?") === -1 ? "?v=" : "&v=") + version;
+}
+
 function toMinutes(timeValue) {
   if (!timeValue || typeof timeValue !== "string") return null;
   var parts = timeValue.split(":");
@@ -187,7 +201,8 @@ function renderLeaderboard(rows, currentUid) {
     avatar.className = "avatar";
     if (row.photoURL) {
       avatar.classList.add("photo");
-      avatar.style.backgroundImage = "url(\"" + row.photoURL + "\")";
+      var cacheBusted = buildPhotoUrl(row.photoURL, row.photoUpdatedAt || row.updatedAt);
+      avatar.style.backgroundImage = "url(\"" + cacheBusted + "\")";
       avatar.textContent = "";
     } else {
       avatar.textContent = row.initials || "?";
@@ -309,6 +324,8 @@ async function loadLeaderboard(userData) {
         name: name,
         points: data.points || 0,
         photoURL: profile.photoURL || "",
+        photoUpdatedAt: profile.photoUpdatedAt || null,
+        updatedAt: profile.updatedAt || null,
         initials: initials
       });
     });
